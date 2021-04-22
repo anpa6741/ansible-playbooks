@@ -1,0 +1,10 @@
+---
+
+- hosts: testvm
+  gather_facts: false
+  tasks:
+   - name: configure cron job
+     cron:
+      minute: "1"
+      job: "today=`date +%Y-%m-%d_%H-%M-%S`; df -h > /tmp/${today}.txt 2>&1"
+      user: vagrant
