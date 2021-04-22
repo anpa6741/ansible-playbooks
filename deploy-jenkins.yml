@@ -5,11 +5,10 @@
   gather_facts: false
   tasks:
    - name: install java
-     apt: name=openjdk-8-jdk state=present
+     apt: name=openjdk-8-jdk state=present update_cache=yes
    - name: add gpgkey
      apt_key:
       url: https://pkg.jenkins.io/debian/jenkins.io.key 
-      keyring: /etc/apt/trusted.gpg.d/jenkins.io.key
       state: present
    - name: add jenkins repository
      lineinfile:
