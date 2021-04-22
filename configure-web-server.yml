@@ -1,0 +1,15 @@
+---
+
+- hosts: testvm
+  become: true
+  gather_facts: false
+  tasks:
+   - name: install apache2
+     apt:
+      name: apache2
+      state: latest
+   - name: enable and start apache2
+     service:
+      name: apache2
+      enabled: yes
+      state: started 
