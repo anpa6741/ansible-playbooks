@@ -1,0 +1,14 @@
+---
+
+- hosts: testvm
+  become: true
+  tasks:
+   - name: install packages
+     apt:
+      name: "{{ packages }}"
+      state: latest
+     vars:
+      packages:
+      - nmap
+      - wireshark
+      - nikto
