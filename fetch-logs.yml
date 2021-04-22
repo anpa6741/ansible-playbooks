@@ -1,0 +1,17 @@
+---
+
+- hosts: testvm
+  become: true
+  gather_facts: false
+  tasks:
+   - name: create a compress archive
+     archive:
+      path: /var/log/*.log
+      dest: /tmp/logs.tgz
+      format: gz
+
+   - name: fetch compress archive
+     fetch:
+      src: /tmp/logs.tgz
+      dest: ./
+      flat: yes
