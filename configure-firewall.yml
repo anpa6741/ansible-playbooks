@@ -1,0 +1,11 @@
+---
+
+- hosts: testvm
+  become: true
+  tasks:
+   - name: configure ufw
+     ufw:
+      rule: allow
+      state: enabled
+      port: 22,80,443
+      proto: tcp
