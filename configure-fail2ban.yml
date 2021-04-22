@@ -1,0 +1,19 @@
+---
+
+- hosts: testvm
+  become: true
+  gather_facts: false
+  tasks:
+   - name: install fail2ban
+     apt: 
+      name: fail2ban 
+      state: present 
+   - name: copy fail2ban configuration file
+     copy:
+      src: ./jail.conf
+      dest: /etc/fail2ban/jail.local
+   - name: restart fail2ban service
+     service:
+      name: fail2ban
+      state: restarted
+      enabled: yes
