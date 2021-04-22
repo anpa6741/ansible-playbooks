@@ -12,3 +12,8 @@
       - nmap
       - wireshark
       - nikto
+      - lynis
+      - radare2
+      - clamav
+      - rkhunter
+      - chkrootkit
