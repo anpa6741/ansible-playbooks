@@ -10,8 +10,7 @@ Requirements:
 
 - Setup ssh keys for passwordless authentication
    - ssh-keygen
-   - ssh-copy-id vagrant@127.0.0.1 -p 2222
-   - On vagrant machine, disable PasswordAuthentication, PermitRootLogin and restart ssh
+   - Run setup script: ./setup.sh 
 
 - Run ansible ad-hoc command to test-connectivity
    - ```ansible testvm -m ping```

@@ -1,12 +1,16 @@
 ---
+# Run playbook with env variables: ansible-playbook deploy-executable.yml -e script_name=[script name] -e execute=true
 
 - hosts: testvm
   become: true
   gather_facts: false
+  vars:
+   script_name: "{{ lookup('env', 'script_name') | default('hello', True) }}"
+   execute: false
   tasks:
    - name: copy executable script
      copy:
-      src: ./hello
+      src: "{{ script_name }}"
       dest: /opt
       owner: vagrant
       group: vagrant
@@ -20,5 +24,7 @@
       state: present
       create: yes
 
-   - name: source bash profile
-     shell: . /home/vagrant/.bashrc
+   - name: execute script
+     script:
+      cmd: "{{ script_name }}"
+     when: execute
