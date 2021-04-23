@@ -1,0 +1,21 @@
+---
+
+- hosts: testvm
+  gather_facts: false
+  become: true
+  tasks:
+   - name: copy network config
+     copy:
+      src: ./networkconfig
+      dest: /etc/network/interfaces.d/60-cloud-init.cfg
+   - name: restart networking
+     block:
+      - name: restart networking 
+        service:
+         name: networking 
+         state: restarted
+         enabled: yes
+     rescue:
+      - name: ignore error
+        debug: 
+         msg: "Ignoring error due to service restart." 

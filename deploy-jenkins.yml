@@ -24,7 +24,7 @@
       name: jenkins
       state: latest
       update_cache: yes
-   - name: check jenkins status
+   - name: start jenkins
      service:
       name: jenkins
       state: started
