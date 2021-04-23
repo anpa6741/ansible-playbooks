@@ -1,5 +1,9 @@
 ---
 
+# Playbook to setup jenkins server
+# Add the following port forwarding rule to access jenkins server on localhost
+#  localhost:8081 => [guest_vm_ip]:8080
+
 - hosts: testvm
   become: true
   gather_facts: false
@@ -29,5 +33,5 @@
      ufw:
       rule: allow
       state: enabled
-      port: 8080
+      port: 22,8080
       proto: tcp
