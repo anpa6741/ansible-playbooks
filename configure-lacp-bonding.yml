@@ -1,4 +1,14 @@
 ---
+# Steps to test Lacp config after running the playbook
+#
+#      - View bonding configuration: cat /proc/net/bonding/bond0
+#      - View Active slave: cat /sys/class/net/bond0/bonding/active_slave
+#      - ping -I bond0 [bond0_ip]
+#      - ifdown [primary_slave_interface]. Verify active slave switches to secondary slave interface.
+#      - ifup [primary_slave_interface]. Verify active slave switched back to primary slave
+#      - Ping traffic should not get interrupted during active-passive failover.
+#
+#
 
 - hosts: testvm
   gather_facts: false
