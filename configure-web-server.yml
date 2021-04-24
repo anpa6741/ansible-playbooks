@@ -1,9 +1,11 @@
 ---
 
-- hosts: testvm
+- hosts: "{{ variable_host | default('node1')}}"
   become: true
   gather_facts: false
   tasks:
+   - name: playbook execution begins
+     debug: msg="Configure Webserver play started.."
    - name: install apache2
      apt:
       name: apache2

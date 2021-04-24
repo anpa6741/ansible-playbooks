@@ -1,9 +1,11 @@
 ---
 
-- hosts: testvm
+- hosts: testvms
   become: true
   gather_facts: false
   tasks:
+   - name: playbook execution begins
+     debug: msg="Deploy Docker play started.."
    - name: remove older version of docker
      apt:
       name: "{{ packages }}"

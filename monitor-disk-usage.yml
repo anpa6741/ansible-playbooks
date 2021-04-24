@@ -1,8 +1,10 @@
 ---
 
-- hosts: testvm
+- hosts: testvms
   gather_facts: false
   tasks:
+   - name: playbook execution begins
+     debug: msg="Monitor disk usage play started.."
    - name: configure cron job
      cron:
       minute: "1"

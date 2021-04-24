@@ -1,0 +1,74 @@
+---
+
+- hosts: node2
+  gather_facts: false
+  become: true
+  tasks:
+   - name: playbook execution begins
+     debug: msg="Deploy Suricate play started.."
+   - name: install packages
+     apt:
+      name: "{{ packages }}"
+      state: present
+     vars:
+      packages:
+      - libpcre3-dbg 
+      - libpcre3-dev
+      - libnet1-dev 
+      - libyaml-dev 
+      - libjansson4 
+      - libcap-ng-dev 
+      - libmagic-dev
+      - libjansson-dev
+      - zlib1g-dev 
+      - autoconf 
+      - automake 
+      - libnetfilter-queue-dev 
+      - libnetfilter-queue1 
+      - libnfnetlink-dev
+      - libtool 
+      - libpcap-dev
+
+   - name: download latest version of suricata and extract it
+     unarchive:
+      src: https://www.openinfosecfoundation.org/download/suricata-4.0.5.tar.gz
+      dest: /tmp
+      remote_src: yes 
+      creates: /tmp/suricata-4.0.5 
+
+   - name: change directory to suricata
+     command: "{{ item }}  chdir=/tmp/suricata-4.0.5/ creates=/etc/suricata/rules"
+     with_items:
+      - ./configure --enable-nfqueue --prefix=/usr --sysconfdir=/etc --localstatedir=/var
+      - make
+      - make install
+      - make install-conf
+      - make install-rules
+
+   - name: modify suricata.yaml file
+     lineinfile:
+      path: /etc/suricata/suricata.yaml
+      regexp: '#HOME_NET: "any"'
+      line: '    HOME_NET: "[192.168.0.0/24]"'
+
+   - name: create custom rule set
+     copy:
+      src: files/suricata.rules
+      dest: /etc/suricata/rules/my.rules
+
+   - name: define the rule path in suricata.yaml
+     lineinfile:
+       path: /etc/suricata/suricata.yaml
+       line: ' - my.rules'
+       insertafter: 'rule-files:'
+       state: present
+
+   - name: disable packet offload features on the NIC
+     command: "{{ item }}"
+     with_items:
+      - ethtool -K enp0s8 tso off
+      - ethtool -K enp0s8 tx off
+      - ethtool -K enp0s8 gro off
+
+   - name: run suricate in live mode
+     command: /usr/bin/suricata -D -c /etc/suricata/suricata.yaml -i enp0s8

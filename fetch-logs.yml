@@ -1,9 +1,11 @@
 ---
 
-- hosts: testvm
+- hosts: testvms
   become: true
   gather_facts: false
   tasks:
+   - name: playbook execution begins
+     debug: msg="Fetch Logs play started.."
    - name: create a compress archive
      archive:
       path: /var/log/*.log

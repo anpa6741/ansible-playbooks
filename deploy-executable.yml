@@ -1,11 +1,11 @@
 ---
 # Run playbook with env variables: ansible-playbook deploy-executable.yml -e script_name=[script name] -e execute=true
 
-- hosts: testvm
+- hosts: testvms
   become: true
   gather_facts: false
   vars:
-   script_name: "{{ lookup('env', 'script_name') | default('hello', True) }}"
+   script_name: "{{ lookup('env', 'script_name') | default('files/create_file', True) }}"
    execute: false
   tasks:
    - name: copy executable script

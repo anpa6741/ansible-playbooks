@@ -8,5 +8,5 @@ iface lo inet loopback
 
 auto enp0s8
 iface enp0s8 inet static
-  address 192.168.0.21
+  address 192.168.0.34
   netmask 255.255.255.0

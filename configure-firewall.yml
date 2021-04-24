@@ -1,9 +1,11 @@
 ---
 
-- hosts: testvm
+- hosts: "{{ variable_host | default('node1') }}" 
   become: true
   gather_facts: false
   tasks:
+   - name: playbook execution begins
+     debug: msg="Configure Firewall play started.."
    - name: configure ufw
      ufw:
       rule: allow

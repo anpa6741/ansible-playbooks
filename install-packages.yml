@@ -1,8 +1,10 @@
 ---
 
-- hosts: testvm
+- hosts: testvms
   become: true
   tasks:
+   - name: playbook execution begins
+     debug: msg="Install packages play started.."
    - name: install packages
      apt:
       name: "{{ packages }}"
@@ -17,3 +19,4 @@
       - clamav
       - rkhunter
       - chkrootkit
+      - hping3

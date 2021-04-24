@@ -10,21 +10,25 @@
 #
 #
 
-- hosts: testvm
+- hosts: "{{ variable_host | default('node1') }}"
   gather_facts: false
   become: true
+  vars:
+   config_file: "{{ lookup('env', 'config_file') | default('static-ip_config', 'True') }}"
   tasks:
+   - name: playbook execution begins
+     debug: msg="Configure LACP Bonding play started.."
    - name: install package
      apt:
       name: ifenslave
       state: present
    - name: copy required kernel modules at boot
      copy:
-      src: modules
+      src: files/modules
       dest: /etc/modules
    - name: copy lacp network config
      copy:
-      src: active-passive.cfg
+      src: "{{ config_file }}"
       dest: /etc/network/interfaces.d/70-cloud-init.cfg
    - name: reboot server for config to take effect
      reboot:

@@ -4,10 +4,12 @@
 # Add the following port forwarding rule to access jenkins server on localhost
 #  localhost:8081 => [guest_vm_ip]:8080
 
-- hosts: testvm
+- hosts: "{{ variable_host | default('node1') }}"
   become: true
   gather_facts: false
   tasks:
+   - name: playbook execution begins
+     debug: msg="Deploy Jenkins play started.."
    - name: install java
      apt: name=openjdk-8-jdk state=present update_cache=yes
    - name: add gpgkey
