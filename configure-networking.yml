@@ -5,3 +5,6 @@
 
 # Configure lacp-bonding with {enp0s9,enp0s10} as bond-slaves. 
 - include: configure-lacp-bonding.yml
+
+# Add default gw for internet connvetivity via enp0s3
+- include: add-default-gw.yml
