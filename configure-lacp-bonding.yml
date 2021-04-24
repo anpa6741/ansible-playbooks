@@ -8,10 +8,10 @@
      apt:
       name: ifenslave
       state: present
-   - name: load required kernel modules at boot
-     lineinfile:
-      path: /etc/modules
-      line: bonding
+   - name: copy required kernel modules at boot
+     copy:
+      src: modules
+      dest: /etc/modules
    - name: copy lacp network config
      copy:
       src: active-passive.cfg
