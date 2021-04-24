@@ -1,0 +1,15 @@
+---
+# Playbook command: ansible-playbook configure-networking.yml -e config_file=[file_name]
+
+- hosts: testvm
+  gather_facts: false
+  become: true
+  vars:
+    config_file: "{{ lookup('env', 'config_file') | default('static-ip_config', 'True') }}"
+  tasks:
+   - name: copy network config
+     copy:
+      src: "{{ config_file }}"
+      dest: /etc/network/interfaces.d/60-cloud-init.cfg
+   - name: reboot server
+     reboot:

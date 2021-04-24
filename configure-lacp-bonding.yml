@@ -1,0 +1,20 @@
+---
+
+- hosts: testvm
+  gather_facts: false
+  become: true
+  tasks:
+   - name: install package
+     apt:
+      name: ifenslave
+      state: present
+   - name: load required kernel modules at boot
+     lineinfile:
+      path: /etc/modules
+      line: bonding
+   - name: copy lacp network config
+     copy:
+      src: active-passive.cfg
+      dest: /etc/network/interfaces.d/70-cloud-init.cfg
+   - name: reboot server for config to take effect
+     reboot:
