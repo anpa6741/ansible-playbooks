@@ -10,7 +10,7 @@ Requirements:
 
 - Setup ssh keys for passwordless authentication
    - ssh-keygen
-   - Run setup script: ./setup.sh <hostname> <port>
+   - Run setup script: ```./setup.sh <hostname> <port>```
 
 - Run ansible ad-hoc command to test-connectivity
    - ```ansible testvm -m ping```
@@ -21,5 +21,5 @@ Requirements:
 - To run playbook on a different host, run the following command:
    - ```ansible-playbook [playbook_name] --extra-vars "variable_host=node2"```
 
-- Troubleshooting playbook common failures
+- Troubleshooting common playbook failures
   - run ```sudo apt update``` on the node where playbook execution failed.
