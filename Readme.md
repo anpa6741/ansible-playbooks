@@ -16,9 +16,10 @@ Requirements:
    - ```ansible testvm -m ping```
    - ```ansible testvm -a "uname -a"```
 
-- To run playbook on a different host, run the following command:
-   - ```ansible-playbook [playbook_name] --extra-vars "variable_host=node2"
+- Run all playbooks: ```ansible-playbook main.yml```
 
+- To run playbook on a different host, run the following command:
+   - ```ansible-playbook [playbook_name] --extra-vars "variable_host=node2"```
 
 - Troubleshooting playbook common failures
   - run ```sudo apt update``` on the node where playbook execution failed.
