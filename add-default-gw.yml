@@ -1,8 +1,0 @@
----
-
-- hosts: testvm
-  gather_facts: false
-  become: true
-  tasks:
-   - name: add default gw
-     shell: route add default gw 10.0.2.2
