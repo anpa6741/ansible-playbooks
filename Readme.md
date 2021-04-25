@@ -14,8 +14,8 @@ Requirements:
     - ```ssh vagrant@127.0.0.1 -p <port>```
 
 - Run ansible ad-hoc command to test-connectivity
-   - ```ansible testvm -m ping```
-   - ```ansible testvm -a "uname -a"```
+   - ```ansible testvms -m ping```
+   - ```ansible testvms -a "uname -a"```
 
 - Run playbooks: ```ansible-playbook main.yml```
 

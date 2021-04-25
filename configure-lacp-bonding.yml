@@ -30,7 +30,7 @@
      copy:
       src: "{{ config_file }}"
       dest: /etc/network/interfaces.d/70-cloud-init.cfg
-     listen: reboot server
+     notify: reboot server
 
   handlers:
    - name: reboot server
