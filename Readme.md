@@ -17,7 +17,10 @@ Requirements:
    - ```ansible testvms -m ping```
    - ```ansible testvms -a "uname -a"```
 
-- Run playbooks: ```ansible-playbook main.yml```
+- Run playbooks:
+   - ```ansible-playbook main.yml```
+   - ```ansible-playbook test-suricata.yml```
+   - ```ansible-playbook traffic-generator -e hping_attack=true```
 
 - To run playbook on a different host, run the following command:
    - ```ansible-playbook [playbook_name] --extra-vars "variable_host=node2"```
