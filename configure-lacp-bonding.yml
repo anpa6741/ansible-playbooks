@@ -14,7 +14,7 @@
   gather_facts: false
   become: true
   vars:
-   config_file: "{{ lookup('env', 'config_file') | default('static-ip_config', 'True') }}"
+   config_file: "{{ lookup('env', 'config_file') | default('files/active-passive_config_1.cfg', 'True') }}"
   tasks:
    - name: playbook execution begins
      debug: msg="Configure LACP Bonding play started.."

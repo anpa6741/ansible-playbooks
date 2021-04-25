@@ -2,7 +2,6 @@
 
 - hosts: testvms
   become: true
-  gather_facts: false
   tasks:
    - name: playbook execution begins
      debug: msg="Fetch Logs play started.."
@@ -15,5 +14,5 @@
    - name: fetch compress archive
      fetch:
       src: /tmp/logs.tgz
-      dest: ./
+      dest: "./{{ ansible_hostname }}/"
       flat: yes

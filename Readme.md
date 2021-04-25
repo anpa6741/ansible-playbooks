@@ -8,9 +8,10 @@ Requirements:
 - Spin up the VM with ```vagrant up``` command.
 - Run ```vagrant ssh-config``` for ssh details.
 
-- Setup ssh keys for passwordless authentication
-   - ssh-keygen
-   - Run setup script: ```./setup.sh <hostname> <port>```
+- Run setup script: ```./setup.sh <hostname1> <hostname2>```
+
+- Command to ssh into the vm
+    - ```ssh vagrant@127.0.0.1 -p <port>```
 
 - Run ansible ad-hoc command to test-connectivity
    - ```ansible testvm -m ping```

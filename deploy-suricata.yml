@@ -1,11 +1,14 @@
 ---
 
 - hosts: node2
-  gather_facts: false
   become: true
+  vars:
+    ip: "{{ ansible_enp0s8.ipv4.address }}/{{ ansible_enp0s8.ipv4.netmask }}"
+    mask_cidr: "{{ ip | ipaddr('prefix') }}"
+    home_net: "{{ ansible_enp0s8.ipv4.address }}/{{ mask_cidr }}"
   tasks:
    - name: playbook execution begins
-     debug: msg="Deploy Suricate play started.."
+     debug: msg="Deploy Suricata play started.."
    - name: install packages
      apt:
       name: "{{ packages }}"
@@ -36,7 +39,7 @@
       remote_src: yes 
       creates: /tmp/suricata-4.0.5 
 
-   - name: change directory to suricata
+   - name: change directory to suricata and execute commands
      command: "{{ item }}  chdir=/tmp/suricata-4.0.5/ creates=/etc/suricata/rules"
      with_items:
       - ./configure --enable-nfqueue --prefix=/usr --sysconfdir=/etc --localstatedir=/var
@@ -49,7 +52,7 @@
      lineinfile:
       path: /etc/suricata/suricata.yaml
       regexp: '#HOME_NET: "any"'
-      line: '    HOME_NET: "[192.168.0.0/24]"'
+      line: '    HOME_NET: "[{{ home_net }}]"'
 
    - name: create custom rule set
      copy:
@@ -63,12 +66,16 @@
        insertafter: 'rule-files:'
        state: present
 
+   - name: debug facts
+     debug:
+      msg: "{{ ansible_enp0s8.device }}"
+
    - name: disable packet offload features on the NIC
      command: "{{ item }}"
      with_items:
-      - ethtool -K enp0s8 tso off
-      - ethtool -K enp0s8 tx off
-      - ethtool -K enp0s8 gro off
+      - ethtool -K "{{ ansible_enp0s8.device }}" tso off
+      - ethtool -K "{{ ansible_enp0s8.device }}" tx off
+      - ethtool -K "{{ ansible_enp0s8.device }}" gro off
 
-   - name: run suricate in live mode
-     command: /usr/bin/suricata -D -c /etc/suricata/suricata.yaml -i enp0s8
+   - name: run suricata in live mode
+     command: /usr/bin/suricata -D -c /etc/suricata/suricata.yaml -i "{{ ansible_enp0s8.device }}"

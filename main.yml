@@ -24,6 +24,9 @@
  # Configure lacp bonding on node 2
 - import_playbook: configure-lacp-bonding.yml variable_host='node2' -e config_file=files/active-passive_config_2.cfg
 
+ # Update hosts file on both nodes
+- import_playbook: update_hosts_file.yml
+
 - import_playbook: deploy-docker.yml
 
 - import_playbook: deploy-jenkins.yml

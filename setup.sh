@@ -1,17 +1,13 @@
 #!/bin/bash
 
-if [ "$#" -eq 2 ]; then
-  hostname=$1
-  port=$2
+if [ "$#" -gt 0 ]; then
+  rm -f ~/.ssh/known_hosts
+  for machine in "$@"
+   do
+    ssh-add .vagrant/machines/$machine/virtualbox/private_key
+   vagrant ssh $machine -c "sudo apt update"
+   done
 else
-  echo "Usage: ./setup.sh <hostname> <port>"
+  echo "Usage: ./setup.sh node1 node2"
   exit 1
 fi
-
-rm -f ~/.ssh/known_hosts
-vagrant ssh $hostname -c "sudo sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config"
-vagrant ssh $hostname -c "sudo systemctl restart sshd"
-ssh-copy-id vagrant@127.0.0.1 -p $port
-vagrant ssh $hostname -c "sudo sed -i 's/PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config"
-vagrant ssh $hostname -c "sudo systemctl restart sshd"
-vagrant ssh $hostname -c "sudo apt update"
