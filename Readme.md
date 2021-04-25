@@ -17,7 +17,7 @@ Requirements:
    - ```ansible testvm -m ping```
    - ```ansible testvm -a "uname -a"```
 
-- Run all playbooks: ```ansible-playbook main.yml```
+- Run playbooks: ```ansible-playbook main.yml```
 
 - To run playbook on a different host, run the following command:
    - ```ansible-playbook [playbook_name] --extra-vars "variable_host=node2"```

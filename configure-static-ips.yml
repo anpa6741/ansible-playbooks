@@ -13,5 +13,9 @@
      copy:
       src: "{{ config_file }}"
       dest: /etc/network/interfaces.d/60-cloud-init.cfg
+     notify: reboot server
+
+  handlers:
    - name: reboot server
      reboot:
+

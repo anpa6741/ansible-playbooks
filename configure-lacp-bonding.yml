@@ -30,5 +30,8 @@
      copy:
       src: "{{ config_file }}"
       dest: /etc/network/interfaces.d/70-cloud-init.cfg
-   - name: reboot server for config to take effect
+     listen: reboot server
+
+  handlers:
+   - name: reboot server
      reboot:

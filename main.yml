@@ -2,6 +2,8 @@
 
 # Run all the playbooks
 
+- import_playbook: install-packages.yml
+
 - import_playbook: configure-fail2ban.yml
 
 - import_playbook: configure-firewall.yml
@@ -32,7 +34,3 @@
 - import_playbook: deploy-jenkins.yml
 
 - import_playbook: deploy-executable.yml
-
-- import_playbook: deploy-suricata.yml
-
-- import_playbook: test-suricata.yml

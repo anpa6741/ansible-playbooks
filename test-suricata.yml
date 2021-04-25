@@ -1,17 +1,12 @@
 ---
 
-- hosts: node1
-  become: true
-  vars: 
-   hping_attack: false
-  tasks:
-   - name: playbook execution begins
-     debug: msg="Test suricata play started.."
-   - name: install nmap
-     apt: name=nmap state=latest
-   - name: perform syn flood attack
-     command: "hping3 -S node2 -p 80 --flood"
-     when: hping_attack
+- import_playbook: configure-static-ips.yml -e config_file=files/static-ip_config_1
 
-   - name: perform nmap scan
-     command: nmap -sS -v -n -A node2 -T4
+- import_playbook: configure-static-ips.yml variable_host='node2' -e config_file=files/static-ip_config_2
+
+ # Update hosts file on both nodes
+- import_playbook: update_hosts_file.yml
+
+- import_playbook: deploy-suricata.yml
+
+- import_playbook: traffic-generator.yml

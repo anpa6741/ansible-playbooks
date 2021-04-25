@@ -12,7 +12,6 @@
    - name: install packages
      apt:
       name: "{{ packages }}"
-      state: present
      vars:
       packages:
       - libpcre3-dbg 
@@ -79,3 +78,4 @@
 
    - name: run suricata in live mode
      command: /usr/bin/suricata -D -c /etc/suricata/suricata.yaml -i "{{ ansible_enp0s8.device }}"
+     ignore_errors: yes
