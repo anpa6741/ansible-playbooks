@@ -19,9 +19,14 @@
    - name: playbook execution begins
      debug: msg="Configure LACP Bonding play started.."
    - name: install package
+
      apt:
-      name: ifenslave
+      name: "{{ packages }}"
       state: present
+     vars:
+      packages:
+       - vlan
+       - ifenslave
    - name: copy required kernel modules at boot
      copy:
       src: files/modules

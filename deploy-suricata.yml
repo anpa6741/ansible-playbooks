@@ -1,5 +1,8 @@
 ---
 
+# After executing the playbook, log into the node and verify the logs for alerts generated.
+# tail -f /var/log/suricata/fast.log
+
 - hosts: node2
   become: true
   vars:
@@ -64,10 +67,6 @@
        line: ' - my.rules'
        insertafter: 'rule-files:'
        state: present
-
-   - name: debug facts
-     debug:
-      msg: "{{ ansible_enp0s8.device }}"
 
    - name: disable packet offload features on the NIC
      command: "{{ item }}"
