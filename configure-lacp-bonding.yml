@@ -38,5 +38,11 @@
      notify: reboot server
 
   handlers:
+
+   # Bring up failed interfaces after reboot
    - name: reboot server
      reboot:
+      test_command: "{{ item }}"
+     with_items:
+      - "ifup enp0s9 --force"
+      - "ifup enp0s10 --force"
