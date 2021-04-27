@@ -2,7 +2,6 @@
 
 - hosts: testvms
   gather_facts: false
-  become: true
   tasks:
    - name: ping nodes
      ping:

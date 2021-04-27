@@ -32,6 +32,10 @@
       state: started
       enabled: yes
 
+  # After running the playbook, test nfs mount mounts by creating files.
+  # sudo touch /mnt/nfs_data_{1,2}/testfile
+  # sudo mkdir /mnt/nfs_data_{1,2}/testdir
+
 - hosts: node1
   gather_facts: false
   become: true

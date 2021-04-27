@@ -1,0 +1,72 @@
+---
+
+- hosts: node1
+  gather_facts: false
+  become: true
+  tasks:
+
+   - name: create users for prometheus and node_exporter
+     user:
+      name: "{{ item }}" 
+      shell: /bin/false
+      create_home: no
+     with_items:
+      - prometheus
+      - node_exporter
+
+   - name: create directories
+     file:
+      path: "{{ item }}"
+      state: directory
+      owner: prometheus
+      group: prometheus
+      recurse: yes
+     with_items:
+      - /etc/prometheus
+      - /var/lib/prometheus
+
+   - name: download and extract prometheus
+     unarchive:
+      src: https://github.com/prometheus/prometheus/releases/download/v2.0.0/prometheus-2.0.0.linux-amd64.tar.gz
+      dest: /tmp
+      remote_src: yes
+      creates: /tmp/prometheus-2.0.0.linux-amd64
+
+   - name: copy binaries
+     copy:
+      src: "{{ item }}"
+      dest: /usr/local/bin
+      owner: prometheus
+      group: prometheus
+      mode: 755
+      remote_src: yes
+     with_items:
+      - /tmp/prometheus-2.0.0.linux-amd64/prometheus
+      - /tmp/prometheus-2.0.0.linux-amd64/promtool
+
+   - name: copy console dir 
+     command: cp -r /tmp/prometheus-2.0.0.linux-amd64/consoles /etc/prometheus
+
+   - name: copy console_libraties dir
+     command: cp -r /tmp/prometheus-2.0.0.linux-amd64/console_libraries /etc/prometheus
+
+   - name: copy prometheus config
+     copy: src=files/prometheus.yml dest=/etc/prometheus/prometheus.yml owner=prometheus group=prometheus
+
+   - name: check if prometheus is running
+     shell: pgrep prometheus
+     register: process_exit_code
+     ignore_errors: yes
+
+   - debug: msg="Exit code {{ process_exit_code.stdout_lines }}"
+
+   - name: run prometheus
+     shell: 'sudo -u prometheus /usr/local/bin/prometheus \
+    --config.file /etc/prometheus/prometheus.yml \
+    --storage.tsdb.path /var/lib/prometheus/ \
+    --web.console.templates=/etc/prometheus/consoles \
+    --web.console.libraries=/etc/prometheus/console_libraries' 
+     async: 2592000
+     poll: 0
+     when: not process_exit_code.stdout_lines
+
