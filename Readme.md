@@ -13,7 +13,10 @@ Requirements:
 - Command to ssh into the vm
     - ```ssh vagrant@127.0.0.1 -p <port>```
 
-- Run ```ansible-playbook test-connectivity.yml```
+- Test Connectivity
+  - ```ansible node1 -m ping```
+  - ```ansible node2 -m ping```
+  -  ```ansible-playbook test-connectivity.yml```
 
 - Run playbooks:
    - ```ansible-playbook main.yml```

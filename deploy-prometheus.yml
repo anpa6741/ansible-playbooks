@@ -1,4 +1,10 @@
 ---
+  # After running the playbook, create a port forwarding rule to access prometheus server on localhost
+  # On the prometheus server, execute the following expressions to gather ubuntu server details
+  #    - node_cpu
+  #    - node_disk_bytes_read
+  #    - node_filesystem_avail_bytes
+  #    - node_network_receive_bytes
 
 - hosts: node1
   gather_facts: false
@@ -53,20 +59,40 @@
    - name: copy prometheus config
      copy: src=files/prometheus.yml dest=/etc/prometheus/prometheus.yml owner=prometheus group=prometheus
 
-   - name: check if prometheus is running
-     shell: pgrep prometheus
-     register: process_exit_code
-     ignore_errors: yes
+   - name: download and extract node_exporter
+     unarchive:
+      src: https://github.com/prometheus/node_exporter/releases/download/v0.15.1/node_exporter-0.15.1.linux-amd64.tar.gz
+      dest: /tmp
+      remote_src: yes
+      creates: /tmp/node_exporter-0.15.1.linux-amd64
 
-   - debug: msg="Exit code {{ process_exit_code.stdout_lines }}"
+   - name: copy node_exporter binary
+     copy:
+      src: /tmp/node_exporter-0.15.1.linux-amd64/node_exporter
+      dest: /usr/local/bin
+      owner: node_exporter
+      group: node_exporter
+      mode: 755
+      remote_src: yes
 
-   - name: run prometheus
-     shell: 'sudo -u prometheus /usr/local/bin/prometheus \
-    --config.file /etc/prometheus/prometheus.yml \
-    --storage.tsdb.path /var/lib/prometheus/ \
-    --web.console.templates=/etc/prometheus/consoles \
-    --web.console.libraries=/etc/prometheus/console_libraries' 
-     async: 2592000
-     poll: 0
-     when: not process_exit_code.stdout_lines
+   - name: copy prometheus and node_exporter service file
+     copy:
+      src: files/{{ item }}.service
+      dest: /etc/systemd/system/{{ item }}.service
+      owner: "{{ item }}"
+      group: "{{ item }}"
+     with_items:
+      - prometheus
+      - node_exporter
+
+   - name: start prometheus and node_exporter service
+     systemd:
+      name: "{{ item }}"
+      state: started
+      enabled: yes
+     with_items:
+      - node_exporter
+      - prometheus
+
+
 
