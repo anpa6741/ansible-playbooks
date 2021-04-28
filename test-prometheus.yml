@@ -25,4 +25,3 @@
       msg: "{{ metrics.stdout_lines }}"
      tags:
       - test
-     

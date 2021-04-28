@@ -1,5 +1,6 @@
 ---
   # After running the playbook, create a port forwarding rule to access prometheus server on localhost
+  # 127.0.0.1:9090 => [guest_vm_ip]:9090
   # On the prometheus server, execute the following expressions to gather ubuntu server details
   #    - node_cpu
   #    - node_disk_bytes_read
@@ -93,6 +94,3 @@
      with_items:
       - node_exporter
       - prometheus
-
-
-
