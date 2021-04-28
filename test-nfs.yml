@@ -15,6 +15,8 @@
      with_items:
       - 1
       - 2
+     tags:
+      - test
 
    - name: create directories to test nfs mounts
      file:
@@ -23,3 +25,5 @@
      with_items:
       - 1
       - 2
+     tags:
+      - test
